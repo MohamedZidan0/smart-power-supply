@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Smart Power Supply — Solder Squad</title>
+    <style>
+        /* ------------------------ Root Variables (Dark/Light) ------------------------ */
+
+        :root {
+            /* Dark Mode Default */
+            --bg: #0f1724;
+            --card: #0b1220;
+            --accent: #0b84ff;
+            --accent2: #4aa8ff;
+            --text: #e6eef8;
+            --muted: rgba(255, 255, 255, 0.06);
+            --gradient-bg: linear-gradient(180deg, #071028 0%, #08131b 100%);
+            --card-bg-start: rgba(255, 255, 255, 0.02);
+            --card-bg-end: rgba(255, 255, 255, 0.01);
+            --card-shadow: 0 6px 20px rgba(2, 6, 23, 0.7);
+            --border-color: rgba(255, 255, 255, 0.03);
+            --nav-bg-color: linear-gradient(180deg, transparent, #071028);
+            --team-card-bg: rgba(255, 255, 255, 0.04);
+            --team-card-border: rgba(255, 255, 255, 0.09);
+            --leader-card-bg: rgba(0, 150, 255, 0.12);
+            --leader-card-border: var(--accent);
+            --leader-shadow: 0 10px 36px rgba(11, 132, 255, 0.14);
+            --glow-color: var(--accent2);
+            --footer-text: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Light Mode */
+        .light-mode {
+            --bg: #f4f7fc;
+            --card: #ffffff;
+            --accent: #0b84ff;
+            --accent2: #4aa8ff;
+            --text: #1e293b;
+            --muted: rgba(0, 0, 0, 0.05);
+            --gradient-bg: linear-gradient(180deg, #e0e7ff 0%, #f4f7fc 100%);
+            --card-bg-start: #ffffff;
+            --card-bg-end: #f9f9ff;
+            --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.05);
+            --nav-bg-color: linear-gradient(180deg, transparent, #f4f7fc);
+            --team-card-bg: #ffffff;
+            --team-card-border: rgba(0, 0, 0, 0.1);
+            --leader-card-bg: #e5f1ff;
+            --leader-card-border: var(--accent);
+            --leader-shadow: 0 10px 36px rgba(11, 132, 255, 0.1);
+            --glow-color: var(--accent);
+            --footer-text: rgba(30, 41, 59, 0.6);
+        }
+
+        /* ------------------------ Base Styles ------------------------ */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, Segoe UI, Arial, sans-serif;
+            background: var(--gradient-bg);
+            color: var(--text);
+            background-color: var(--bg);
+            transition: background-color .45s ease, color .45s ease;
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        .wrap {
+            max-width: 1000px;
+            margin: 28px auto;
+            padding: 18px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #012;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 8px 30px rgba(11, 132, 255, 0.06);
+            transition: box-shadow .35s ease, transform .35s ease, background .35s ease;
+            animation: floatLogo 4s infinite ease-in-out;
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+
+        @keyframes floatLogo {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 0.2px;
+        }
+
+        .slide h3 {
+            font-family: monospace, sans-serif;
+            color: var(--accent2);
+            margin-top: 10px;
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+
+        p.lead {
+            opacity: 0.9;
+            margin-top: 6px;
+            color: var(--text);
+        }
+
+        .supervisor {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1.15;
+        }
+
+        nav {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            background: var(--muted);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 13px;
+            backdrop-filter: blur(6px);
+            transition: background .25s, color .25s, box-shadow .25s, transform .25s;
+            border: 1px solid var(--border-color);
+        }
+
+        nav a:hover {
+            background: var(--accent);
+            color: #012;
+            box-shadow: 0 8px 30px rgba(11, 132, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .stage {
+            margin-top: 22px;
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent);
+            width: 0%;
+            z-index: 9999;
+            box-shadow: 0 0 10px var(--accent);
+            transition: width 0.1s linear;
+        }
+
+
+        .slide {
+            background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end));
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            transform: translateY(30px) scale(.995);
+            animation: enter .7s forwards;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: box-shadow .35s ease, transform .35s ease, background .35s ease;
+            position: relative;
+        }
+
+        .slide::before,
+        .card::before,
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), var(--glow-color) 0%, transparent 40%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+            z-index: 1;
+        }
+
+        .slide:hover::before,
+        .card:hover::before,
+        .team-card:hover::before {
+            opacity: 0.2;
+        }
+
+        .slide:hover,
+        .card:hover,
+        .team-card:hover {
+            position: relative;
+            z-index: 3;
+        }
+
+        .slide::after,
+        .card::after,
+        .team-card::after {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: conic-gradient(from 0deg, transparent 0%, var(--accent) 5%, transparent 30%, transparent 70%, var(--accent2) 95%, transparent 100%);
+            mask: linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s ease;
+            z-index: 0;
+        }
+
+        .slide:hover::after,
+        .card:hover::after,
+        .team-card:hover::after {
+            opacity: 1;
+            animation: rotateBorder 4s linear infinite;
+        }
+
+        @keyframes rotateBorder {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        .slide:nth-child(odd) {
+            animation-delay: .06s;
+        }
+
+        .slide h2 {
+            margin: 0 0 8px 0;
+            color: var(--accent);
+        }
+
+        @keyframes enter {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: var(--card-bg-start);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: transform .3s ease, box-shadow .3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 18px 40px rgba(11, 132, 255, 0.1);
+        }
+
+        .navsticky {
+            position: sticky;
+            top: 14px;
+            padding: 10px 0;
+            background: var(--nav-bg-color);
+            backdrop-filter: blur(12px);
+            z-index: 4;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+
+        .project-media {
+            position: relative;
+            padding: 0;
+            min-height: 250px;
+            overflow: hidden;
+            background: transparent;
+            border: none;
+            transition: height 0.5s ease-out;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .project-media img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative !important;
+        }
+
+
+        .project-media.slider-container {
+            position: relative;
+        }
+
+        #enclosure-slider .slider-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            object-fit: contain;
+
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            z-index: 1;
+        }
+
+        #enclosure-slider .slider-image.active {
+            opacity: 1;
+            transform: scale(1);
+            position: relative;
+            z-index: 2;
+        }
+
+        
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev {
+            left: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev:hover,
+        .next:hover {
+            background-color: var(--accent);
+            color: #012;
+            transform: scale(1.1);
+        }
+        
+        .slider-controls {
+            display: none !important;
+        }
+        
+        .placeholder-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2em;
+            color: var(--accent);
+            z-index: 1;
+            border: none !important;
+            background: transparent !important;
+        }
+
+        .team-layout {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .side-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .team-card {
+            background: var(--team-card-bg);
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid var(--team-card-border);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: 0.35s;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .team-card:hover {
+            transform: perspective(600px) rotateX(2deg) rotateY(-2deg) scale(1.05);
+            box-shadow: 0 0 25px rgba(11, 132, 255, 0.2);
+        }
+
+        /* Special styling for the leader card (Mohamed Zidan) */
+        .leader-card {
+            background: var(--leader-card-bg);
+            border: 1px solid var(--leader-card-border);
+            animation: floatCard 4s infinite ease-in-out;
+            box-shadow: var(--leader-shadow);
+            transform: scale(1.15);
+            padding: 28px 20px;
+            z-index: 5;
+        }
+
+        /* Corrected: Adjusted scale on hover to match base scale (1.15) */
+        .leader-card:hover {
+            transform: perspective(600px) rotateX(2deg) rotateY(-2deg) scale(1.15);
+        }
+
+        @keyframes floatCard {
+            0% {
+                transform: translateY(0) scale(1.15);
+            }
+
+            50% {
+                transform: translateY(-6px) scale(1.15);
+            }
+
+            100% {
+                transform: translateY(0) scale(1.15);
+            }
+        }
+
+        .avatar {
+            /* **الحجم المصحح** */
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            margin: auto;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: #012;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 0 16px var(--accent);
+            overflow: hidden;
+            border: 3px solid white;
+        }
+
+        .leader-card .avatar {
+            /* **الحجم المصحح للقائد** */
+            width: 80px;
+            height: 80px;
+            box-shadow: 0 0 25px var(--accent2);
+            border: 4px solid white;
+        }
+
+        .name {
+            font-weight: 700;
+            margin-top: 4px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .role {
+            font-size: 12px;
+            color: var(--accent2);
+            opacity: 0.7;
+            margin-bottom: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(5px);
+        }
+
+        .team-card:hover .role {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Neon Button with Pulse Animation */
+        .neon-btn {
+            padding: 12px 20px;
+            background: var(--accent);
+            color: #012;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 0 18px var(--accent2);
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        .neon-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 30px var(--accent);
+        }
+
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 10px var(--accent2), 0 0 15px var(--accent);
+            }
+
+            to {
+                box-shadow: 0 0 15px var(--accent2), 0 0 25px var(--accent);
+            }
+        }
+
+        /* ------------------------ Toggle Switch (Icons Added) ------------------------ */
+        .mode-toggle-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 100;
+            background: var(--card-bg-start);
+            padding: 6px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .mode-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .mode-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--muted);
+            transition: 0.4s;
+            border-radius: 34px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+
+        /* Icons styling */
+        .slider .icon {
+            font-size: 18px;
+            line-height: 1;
+            transition: opacity 0.4s;
+            color: var(--text);
+        }
+
+        .slider .icon-dark {
+            opacity: 1;
+        }
+
+        .slider .icon-light {
+            opacity: 0;
+        }
+
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            transition: 0.4s;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* When checked (Light Mode) */
+        input:checked+.slider:before {
+            transform: translateX(26px);
+            background: var(--text);
+        }
+
+        input:checked+.slider .icon-dark {
+            opacity: 0;
+        }
+
+        input:checked+.slider .icon-light {
+            opacity: 1;
+        }
+
+        /* ------------------------ Responsive ------------------------ */
+        @media (max-width: 700px) {
+            .wrap {
+                padding: 12px;
+            }
+
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                width: 56px;
+                height: 56px;
+                margin-top: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .supervisor {
+                font-size: 16px;
+            }
+
+            .navsticky nav {
+                justify-content: center;
+            }
+
+            /* Adjust team layout for mobile */
+            .team-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .leader-card {
+                transform: scale(1.05);
+                order: -1;
+            }
+
+            .side-group {
+                gap: 12px;
+                margin-top: 10px;
+            }
+
+            @keyframes floatCard {
+                0% {
+                    transform: translateY(0) scale(1.05);
+                }
+
+                50% {
+                    transform: translateY(-4px) scale(1.05);
+                }
+
+                100% {
+                    transform: translateY(0) scale(1.05);
+                }
+            }
+
+            .mode-toggle-container {
+                top: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="progress-bar"></div>
+
+    <div class="mode-toggle-container">
+        <label class="mode-switch">
+            <input type="checkbox" id="mode-toggle">
+            <span class="slider">
+                <span class="icon icon-dark" style="z-index: 2;">🌙</span>
+                <span class="icon icon-light" style="z-index: 2;">☀️</span>
+            </span>
+        </label>
+    </div>
+
+    <div class="wrap">
+        <header>
+            <div class="logo">
+                <img src="10633663.png" alt="Solder Squad Logo">
+            </div>
+            <div>
+                <h1>Smart Power Supply</h1>
+                <p class="lead">Welcome to the project booklet for the Smart Power Supply, developed by the Solder
+                    Squad team</p>
+                <p class="supervisor">Under super vision Dr. Ibrahim Zewail</p>
+            </div>
+        </header>
+
+        <div class="navsticky">
+            <nav>
+                <a href="#intro">Introduction</a>
+                <a href="#circuit-design">Circuit Design</a>
+                <a href="#inputs">Power Inputs</a>
+                <a href="#mppt">MPPT</a>
+                <a href="#bms">BMS</a>
+                <a href="#outputs">Outputs</a>
+                <a href="#enclosure-design">Enclosure Design</a>
+                <a href="#team">Team</a>
+            </nav>
+        </div>
+
+        <main class="stage">
+            <section id="intro" class="slide">
+                <h2>Introduction</h2>
+                <p>The <strong>Smart Power Supply</strong> provides multi-source DC power, battery charging with MPPT,
+                    fixed & adjustable outputs, and monitoring — ideal for education and practical applications.</p>
+
+                
+                <div class="features">
+                    <div class="card"><strong>Use-cases</strong><br />Lab experiments, portable charging, electronics
+                        protyping.</div>
+                    <div class="card"><strong>Design goals</strong><br />Safety, flexibility, efficiency.</div>
+                    <div class="card"><strong>Outputs</strong><br />5V fixed + 1.25–12V adjustable.</div>
+                </div>
+            </section>
+
+            <section id="circuit-design" class="slide">
+                <h2>Circuit Design</h2>
+                <p>The circuit diagram shows all the electronic units used and their logical interconnection, including the power stage, the MPPT unit, the battery management system, and the regulated output stages.</p>
+                <p>The components were selected based on efficiency requirements, with a focus on using standard modules to ensure ease of understanding and implementation in an educational environment.</p>
+                <br>
+                <div class="project-media">
+                    <a href="FinalProject.png" target="_blank" ><img src="FinalProject.png" alt="Smart Power Supply"></a>
+                </div>
+            </section>
+            <section id="inputs" class="slide">
+                <h2>Power Input Sources</h2>
+                <p>Two main charging sources: solar panel (18V, 10W) and AC transformer (220V → 12/24V).</p>
+
+
+                <h3>Solar Panel</h3>
+                <p>18V – 10W panel connects through a source-selection switch to the MPPT module.</p>
+                <h3>AC Transformer</h3>
+                <p>220V AC → transformer → bridge rectifier → filter capacitor → MPPT input.</p>
+            </section>
+
+            <section id="mppt" class="slide">
+                <h2>MPPT Charging System</h2>
+                <p>MPPT finds maximum power point for the solar/rectified source and optimizes charging efficiency while
+                    protecting batteries.</p>
+                <div class="card" style="margin-top:10px">The MPPT dynamically adjusts voltage/current to maximize
+                    harvested energy.</div>
+            </section>
+
+            <section id="bms" class="slide">
+                <h2>Battery Management System (BMS)</h2>
+                <p>Protects three Li-ion cells (3.6V each) with overcharge, over-discharge and overcurrent protections.
+                    Output routed via main power switch.</p>
+                <div class="features">
+                    <div class="card">Overcharge protection</div>
+                    <div class="card">Over-discharge protection</div>
+                    <div class="card">Overcurrent protection</div>
+                </div>
+            </section>
+
+            <section id="outputs" class="slide">
+                <h2>Output Stages</h2>
+                <h3>5V USB (Fixed)</h3>
+                <p>LM2596 buck module set to 5V for USB devices and microcontrollers.</p>
+                <h3>Adjustable Output</h3>
+                <p>LM2596-based adjustable output (1.25–12V) with external potentiometer for easier control.</p>
+                <p>Voltage monitor toggles between 5V and adjustable output.</p>
+            </section>
+
+            <section id="enclosure-design" class="slide">
+                <h2>Enclosure Design</h2>
+                <p>The enclosure was designed to be functional and safe, allowing easy access to all inputs and outputs, in addition to providing proper ventilation for the internal components.</p>
+
+                <div class="project-media slider-container" id="enclosure-slider">
+                    <a href="Boxone.png" target="_blank" ><img
+                        src="Boxone.png"
+                        alt="نموذج تصميم الصندوق الخارجي 1"
+                        class="slider-image active"
+                    ></a>
+                    
+                    
+                    <div class="placeholder-text">Loading Enclosure Visuals...</div>
+
+                    <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                    <a class="next" onclick="changeSlide(1)">&#10095;</a>
+                </div>
+                <div class="features">
+                    <div class="card"><strong>Material</strong><br />High-impact Aluminum for durability.
+                    </div>
+                    <div class="card"><strong>Safety</strong><br />Insulated terminals and clearly labeled ports.</div>
+                    <div class="card"><strong>Interface</strong><br />Digital display for voltage monitoring.</div>
+                </div>
+            </section>
+            <section id="exp" class="slide">
+                <h2>Experiment Overview — Complete Workflow</h2>
+                <p>This experiment demonstrates the full operational workflow of the Smart Power Supply. The process
+                    begins with selecting an input source (solar panel or AC transformer), followed by power
+                    conditioning through the bridge rectifier and filter capacitor. The MPPT module then optimizes energy
+                    extraction and delivers a controlled charging current to the BMS, which manages the protection and
+                    balancing of the lithium cells.</p>
+                <p>After the battery is charged, students examine how the output stage delivers both fixed (5V USB) and
+                    adjustable (1.25–12V) voltages using the LM2596 regulator. The voltage monitor is used to observe
+                    real-time readings, helping students understand load behavior, voltage stability, and regulator
+                    response under different operating conditions.</p>
+
+            </section>
+
+            <section id="team" class="slide">
+                <h2 style="text-align:center; margin-bottom:22px;">Team — Solder Squad</h2>
+
+                <div class="team-layout">
+                    <div class="side-group">
+                        <div class="team-card">
+                            <div class="avatar">A</div>
+                            <div class="name">Ahmed Mostafa Mohamed Elnenaey</div>
+                        </div>
+
+                        <div class="team-card">
+                            <div class="avatar">A</div>
+                            <div class="name">Ahmed Elsayed Mohamed Mahmoud</div>
+                        </div>
+                    </div>
+
+                    <div class="team-card leader-card">
+                        <div class="avatar">
+                            <img src="Zidan.png" alt="Mohamed Hamada Zidan Atiya Avatar"
+                                style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        </div>
+                        <div class="name">Mohamed Hamada Zidan Atiya</div>
+                    </div>
+
+                    <div class="side-group">
+                        <div class="team-card">
+                            <div class="avatar">
+                                <img src="Abdelmawla.png" alt="Mohamed Abdelmawla Mohamed Shahata Avatar"
+                                    style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                            </div>
+                            <div class="name">Mohamed Abdelmawla Mohamed Shahata</div>
+                        </div>
+
+                        <div class="team-card">
+                            <div class="avatar">
+                                <img src="Asmaa.png" alt="Asmaa Ahmed Allam Ibrahim Avatar"
+                                    style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                            </div>
+                            <div class="name">Asmaa Ahmed Allam Ibrahim</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-media" style="margin-top: 40px;">
+                    <p>Photo for team</p>
+                </div>
+                <div style="margin-top:40px; text-align:center;">
+                    <a href="Smart Power Supply .pdf" target="_blank" class="neon-btn">Download PDF</a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Prepared by Solder Squad — Smart Power Supply Project</p>
+            <p style="font-size:12px;opacity:0.7">Inspired by modern tech document design. Ensure all image assets are
+                in the project folder.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --------------------------------------------------------
+        // GLOBAL SLIDER VARIABLES (Needed for arrow functions)
+        // --------------------------------------------------------
+        let slideIndex = 0;
+        let sliderImages = [];
+        let sliderContainer = null;
+
+        // --------------------------------------------------------
+        // 1. Dark/Light Mode Toggle
+        // --------------------------------------------------------
+        const toggle = document.getElementById('mode-toggle');
+        const html = document.documentElement;
+
+        function applyMode(isLightMode) {
+            if (isLightMode) {
+                html.classList.add('light-mode');
+                localStorage.setItem('mode', 'light-mode');
+            } else {
+                html.classList.remove('light-mode');
+                localStorage.setItem('mode', 'dark-mode');
+            }
+        }
+
+        const storedMode = localStorage.getItem('mode');
+        if (storedMode === 'light-mode') {
+            applyMode(true);
+            toggle.checked = true;
+        } else {
+            applyMode(false);
+            toggle.checked = false;
+        }
+
+
+        toggle.addEventListener('change', () => {
+            applyMode(toggle.checked);
+        });
+
+
+        // 2. Mouse Tracking Glow Effect
+        const glowingElements = document.querySelectorAll('.slide, .card, .team-card');
+
+        glowingElements.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                el.style.setProperty('--x', `${x}%`);
+                el.style.setProperty('--y', `${y}%`);
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.setProperty('--x', '50%');
+                el.style.setProperty('--y', '50%');
+            });
+        });
+
+
+        // 3. Reveal slides animation (Inflow)
+        const slides = document.querySelectorAll('.slide');
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.12
+        });
+
+        slides.forEach(s => observer.observe(s));
+
+
+        // 4. Reading Progress Bar Logic
+        const progressBar = document.getElementById('progress-bar');
+
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        }
+
+        window.onscroll = updateProgressBar;
+        updateProgressBar();
+
+
+        // 5. Manual Image Slider (Enclosure Design)
+        // 5. Manual Image Slider (Enclosure Design)
+        
+function showSlide(n) {
+    if (!sliderImages.length || !sliderContainer) return;
+
+    // Remove active class from all images
+    sliderImages.forEach(img => img.classList.remove('active'));
+
+    // Calculate new index
+    if (n >= sliderImages.length) {
+        slideIndex = 0; // Wrap around to the start
+    } else if (n < 0) {
+        slideIndex = sliderImages.length - 1; // Wrap around to the end
+    } else {
+        slideIndex = n;
+    }
+
+    // Add active class to the new slide
+    sliderImages[slideIndex].classList.add('active');
+
+    // **التعديل الهام هنا:**
+    // تحديث ارتفاع الحاوية بناءً على ارتفاع الصورة النشطة (مع تأخير بسيط لضمان حساب الارتفاع الصحيح بعد التبديل)
+    setTimeout(() => {
+        // نستخدم clientHeight أو offsetHeight لحساب الارتفاع بعد أن تصبح الصورة مرئية (opacity: 1)
+        const activeImageHeight = sliderImages[slideIndex].offsetHeight;
+        if (activeImageHeight > 0) {
+            sliderContainer.style.height = activeImageHeight + 'px';
+        }
+    }, 50); // تأخير 50 مللي ثانية
+}
+
+// Public function called by HTML arrows (onclick)
+function changeSlide(n) {
+    showSlide(slideIndex + n);
+}
+        
+        // Initialization function
+        function initializeManualSlider() {
+            sliderContainer = document.getElementById('enclosure-slider');
+            if (!sliderContainer) return;
+
+            // Populate global variables
+            sliderImages = sliderContainer.querySelectorAll('.slider-image');
+            const placeholder = sliderContainer.querySelector('.placeholder-text');
+            
+            if (sliderImages.length === 0) return;
+
+            // Hide placeholder text and set initial height
+            if (placeholder) {
+                placeholder.style.display = 'none';
+
+                sliderImages[0].onload = () => {
+                    sliderContainer.style.height = sliderImages[0].offsetHeight + 'px';
+                };
+                if (sliderImages[0].complete) {
+                    sliderContainer.style.height = sliderImages[0].offsetHeight + 'px';
+                }
+            }
+
+            // Set initial slide to 0 and ensure CSS is applied
+            showSlide(0); 
+        }
+
+        // Call the slider function when the window loads all assets
+        window.addEventListener('load', initializeManualSlider);
+
+    </script>
+</body>
+
+</html>
