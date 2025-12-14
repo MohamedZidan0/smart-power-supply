@@ -76,7 +76,6 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; position: relative; z-index: 2; }
         
-        /* Mobile adjustment for container padding */
         @media (max-width: 768px) { .container { padding: 1rem; } }
 
         .card {
@@ -97,7 +96,7 @@
             background: linear-gradient(45deg, var(--primary), transparent, var(--secondary));
             box-shadow: var(--neon-glow); transition: 0.5s; margin: 20px 0;
         }
-        .neon-img-container img { display: block; width: 100%; border-radius: 8px; filter: contrast(1.1); }
+        .neon-img-container img, .neon-img-container video { display: block; width: 100%; border-radius: 8px; filter: contrast(1.1); }
 
         /* Navbar */
         .navbar {
@@ -159,28 +158,11 @@
         .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); background: rgba(0, 243, 255, 0.05); }
         textarea.form-input { resize: vertical; min-height: 120px; }
 
-        /* ================================
-           MOBILE RESPONSIVENESS FIXES
-        ================================ */
         @media(max-width: 900px){
-            h1 { font-size: 2.2rem; }
-            .navbar { border-radius: 0; top: 0; padding: 10px; }
-            .nav-link { font-size: 0.75rem; padding: 5px 10px; }
-            
-            /* Make Team Column Stack */
             .team-layout { flex-direction: column; gap: 30px; }
-            
-            /* Remove fixed widths on mobile so it fits the screen */
             .center-column, .side-column { width: 100%; max-width: 100%; }
-            
-            /* 
-               Move Leader (Center Column) to the TOP 
-               by giving it a lower order number 
-            */
             .center-column { order: -1; }
-            
-            /* Adjust padding inside cards for small screens */
-            .card { padding: 1.5rem; }
+            .navbar { border-radius: 0; top: 0; }
         }
     </style>
 </head>
@@ -312,7 +294,7 @@
                 <h2>Enclosure Design</h2>
                 <p>The enclosure was designed to be functional and safe, allowing easy access to all inputs and outputs, in addition to providing proper ventilation for the internal components.</p>
                 
-                <div class="slider-wrapper">
+                <div class="slider-wrapper" id="enclosure-slider">
                     <img src="Boxone.png" class="active" alt="Enclosure View 1">
                     <img src="BoxTwo.png" alt="Enclosure View 2">
                     <img src="BoxThree.png" alt="Enclosure View 3">
@@ -349,13 +331,7 @@
             <section id="team" class="fade-in" style="margin-bottom: 60px;">
                 <h2 style="text-align: center; border: none; margin-bottom: 40px; text-shadow: 0 0 10px var(--primary);">Solder Squad</h2>
                 
-                <!-- 
-                   Team Layout:
-                   PC: Side | Center (Leader) | Side
-                   Mobile: Center (Leader) Top | Side | Side
-                -->
                 <div class="team-layout">
-                    
                     <!-- Left Column -->
                     <div class="side-column">
                         <div class="member-card js-tilt">
@@ -364,7 +340,7 @@
                         </div>
                         <div class="member-card js-tilt">
                             <div class="img-glow"><img src="Hegazy.jpg" alt="Ahmed Elsayed"></div>
-                            <h3>Ahmed Elsayed Mohamed Mahmoud</h3>
+                            <h3>Ahmed Elsayed Mohamed Hegazy</h3>
                         </div>
                     </div>
 
@@ -389,10 +365,29 @@
                     </div>
                 </div>
 
+                <!-- Team Photos Slider & Video -->
                 <div style="text-align: center; margin-top: 50px;">
-                    <div class="neon-img-container" style="max-width: 650px; margin: 0 auto 30px;">
-                        <img src="Team.jpg" alt="Team Group Photo">
+                    
+                    <!-- Team Slider -->
+                    <div style="max-width: 650px; margin: 0 auto;">
+                        <div class="slider-wrapper" id="team-slider">
+                            <img src="team2.jpg" class="active" alt="Team Group Photo 1">
+                            <img src="Team.jpg" alt="Team Group Photo 2"> <!-- تأكد من وجود صورة باسم Team2.jpg -->
+                        </div>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button class="btn-neon" onclick="moveTeamSlide(-1)" style="padding: 8px 20px; font-size: 14px;">❮ Prev</button>
+                            <button class="btn-neon" onclick="moveTeamSlide(1)" style="padding: 8px 20px; font-size: 14px;">Next ❯</button>
+                        </div>
                     </div>
+
+                    <!-- Project Video Section -->
+                    <div class="neon-img-container" style="max-width: 650px; margin: 40px auto 30px;">
+                        <video controls style="width: 100%; border-radius: 8px;">
+                            <source src="Video Team.mp4" type="video/mp4"> <!-- تأكد من وجود فيديو باسم ProjectVideo.mp4 -->
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
                     <a href="Smart Power Supply .pdf" target="_blank" class="btn-neon">Download PDF Report</a>
                 </div>
             </section>
@@ -403,11 +398,8 @@
                 <p style="text-align: center;">Have questions? Fill out the form below and we will get back to you.</p>
                 
                 <form action="https://formspree.io/f/xovgrbor" method="POST" class="contact-form">
-                    
                     <input type="email" name="email" class="form-input" placeholder="Your Email Address" required>
-                    
                     <textarea name="message" class="form-input" placeholder="Your Message..." required></textarea>
-                    
                     <button type="submit" class="btn-neon" style="margin-top: 0; width: 100%;">Send Message</button>
                 </form>
             </section>
@@ -429,7 +421,7 @@
             cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
             cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
         });
-        document.querySelectorAll('a, button, .member-card, .card, input, textarea').forEach(el => {
+        document.querySelectorAll('a, button, .member-card, .card, input, textarea, video').forEach(el => {
             el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
         });
@@ -446,10 +438,11 @@
             card.addEventListener('mouseleave', () => { card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`; });
         });
 
-        // 3. Slider
+        // 3. ENCLOSURE SLIDER
         let slideIndex = 0;
-        const slides = document.querySelectorAll('.slider-wrapper img');
+        const slides = document.querySelectorAll('#enclosure-slider img');
         function moveSlide(n) {
+            if(slides.length === 0) return;
             slides[slideIndex].classList.remove('active');
             slideIndex += n;
             if (slideIndex >= slides.length) slideIndex = 0;
@@ -457,7 +450,19 @@
             slides[slideIndex].classList.add('active');
         }
 
-        // 4. Reveal on Scroll
+        // 4. TEAM SLIDER (New)
+        let teamSlideIndex = 0;
+        const teamSlides = document.querySelectorAll('#team-slider img');
+        function moveTeamSlide(n) {
+            if(teamSlides.length === 0) return;
+            teamSlides[teamSlideIndex].classList.remove('active');
+            teamSlideIndex += n;
+            if (teamSlideIndex >= teamSlides.length) teamSlideIndex = 0;
+            if (teamSlideIndex < 0) teamSlideIndex = teamSlides.length - 1;
+            teamSlides[teamSlideIndex].classList.add('active');
+        }
+
+        // 5. Reveal on Scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -468,7 +473,7 @@
         });
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // 5. Particles
+        // 6. Particles
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 25; i++) {
             const span = document.createElement('span');
@@ -480,7 +485,7 @@
             particlesContainer.appendChild(span);
         }
 
-        // 6. Navigation Link Highlighting
+        // 7. Navigation Link Highlighting
         window.addEventListener('scroll', () => {
             let current = '';
             document.querySelectorAll('section').forEach(section => {
